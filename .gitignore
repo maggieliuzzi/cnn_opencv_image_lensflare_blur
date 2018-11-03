@@ -1,0 +1,15 @@
+# IDE
+.idea/
+.xml
+
+# Virtual Environment
+venv/
+*.pyc
+
+# Dataset
+training-data/
+.jpg
+.png
+
+# Models
+*.h5
