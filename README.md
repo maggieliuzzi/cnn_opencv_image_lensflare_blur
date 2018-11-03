@@ -55,25 +55,14 @@ Alternatively, you can follow installation up to the end of Step 2 and then use 
 
 
 
-* **Adience_Gender/** contains the required python scripts to train a gender-recognition model.
-
-
-* **form...py** scripts perform data processing to get the image list to a usable format.
-* **proc...py** scripts separate data into training, validation and testing sets.
-* **train...py** scripts train the network over a certain number of epochs and outputs an .h5 model.
-* **server...py** scripts start a server that receives HTTP POST request with individual test images and outputs the estimated probabilities. 
+* **detector.py** takes a model and an image as arguments and classifies the image as 'Good' or 'Faulty'.
+* **server.py** scripts start a server that receives HTTP POST request with a test image and outputs the estimated probabilities. 
 Eg: http://0.0.0.0:4000/predict
-"prediction_age": {
-    "1-15": 0.01101667433977127,
-    "16-30": 0.9543766379356384,
-    "31-45": 0.03458355739712715,
-    "46-60": 0.000023107986635295674
-},
-"prediction_gender": {
-    "Female": 0.10200900584459305,
-    "Male": 0.8979910016059875
+"prediction": {
+    "Good": 0.01101667433977127,
+    "Faulty": 0.9543766379356384
 }
-
-* **test...py** scripts test the quality of a model with the images in the test/ folder generated running proc...py.
-
-* **predict_gender_age.py** takes a gender-recognition model, an age-recognition model and an image as arguments and predicts the gender and age of the person in the image.
+* **predict_functions.py** defines functions used to make predictions.
+* **test.py** scripts test the quality of a model with the images in the test/ folder generated running preprocessing.py.
+* **train_good_faulty.py** scripts train the network over a certain number of epochs and outputs an .h5 model.
+* **preprocessing.py** scripts separate data into training, validation and testing sets.
