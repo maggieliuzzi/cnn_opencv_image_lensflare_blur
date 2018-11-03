@@ -39,7 +39,8 @@ virtualenv -p [path to your python 2.7 interpreter] venv
 source venv/bin/activate
 ```
 
-5. Add cv2 to your venv (https://www.youtube.com/watch?v=iluST-V757A):
+5. Add cv2 to your virtual environment (https://www.youtube.com/watch?v=iluST-V757A):
+
 
 
 6. Install the project's dependencies:
