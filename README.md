@@ -4,10 +4,17 @@ This project is for the development of a convolutional neural network (CNN) for 
 
 It was developed by Maggie Liuzzi.
 
-The dataset used is:
-    
-
-
+The dataset used for training consists of:
+```shell
+75 images provided (25 good, 25 flare, 25 blurry)
+Web-scrapping (https://github.com/hardikvasa/google-images-download, uses ChromeDriver) (keywords: )
+    Commands:
+    pip install google_images_download
+    brew tap homebrew/cask
+    brew cask install chromedriver
+    (which chromedriver)
+    eg. googleimagesdownload -k 'lens flare daytime' -l 212 -cd /usr/local/bin/chromedriver
+```
 
 
 ## Installation

@@ -8,5 +8,6 @@ numpy~=1.15.1
 Pillow~=5.2.0
 scikit-image~=0.14.1
 scipy~=1.1.0
-theano~=1.0.3
+tensorboard~=1.8.0
+tensorflow~=1.8.0
 termcolor~=1.1.0

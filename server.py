@@ -1,15 +1,14 @@
 # Starts a server which can receive images via HTTP POST and return predictions
 # Based on: https://blog.keras.io/building-a-simple-keras-deep-learning-rest-api.html
 
-from predict_functions import prepare_model, predict_from_file
+from predict_functions import prepare_model, predict_from_file, predict_from_pil
 import flask
 import os
 import argparse
 import numpy as np
 
 app = flask.Flask(__name__)
-model_age = None
-model_gender = None
+model = None
 
 # Receive images via POST at /predict and respond with JSON containing the prediction vector
 @app.route("/predict", methods=["POST"])
@@ -24,8 +23,8 @@ def predict():
         raw_prediction = predict_from_pil(model, image)
         prediction = "Good" if raw_prediction[0] >= raw_prediction[1] else "Faulty"
 
-        print("Probability of [Good, Faulty]: " + str(raw_prediction))
-        data["prediction"] = {"Good": float(raw_prediction[0]), "Faulty": float(raw_prediction[1]), "Guess": prediction}
+        print("Probability of [Faulty, Good]: " + str(raw_prediction))
+        data["prediction"] = {"Faulty": float(raw_prediction[0]), "Good": float(raw_prediction[1]), "Guess": prediction}
 
         data["success"] = True
     else:
@@ -40,13 +39,10 @@ if __name__ == "__main__":
         epilog="Created by Maggie Liuzzi")
     parser.add_argument('--model', default=None, required=True,
                         help="required; path to the neural network model file.")
-    parser.add_argument('--bucketsize', default=None, required=True,
-                        help="the age range of a single bucket in the prediction; required; must be: 15, 10 or 5.")
     parser.add_argument('--port', default=4000, help="the port the server occupies; defaults to 4000.")
     args = parser.parse_args()
-    bucket_size = int(args.bucketsize)
 
-    if not os.path.isfile(args.model_age):
+    if not os.path.isfile(args.model):
         print("ERROR: Could not find model file.")
         exit(1)
     try:

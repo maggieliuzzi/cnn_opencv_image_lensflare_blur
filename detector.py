@@ -9,7 +9,40 @@ import matplotlib.pyplot as plt # Optional
 print("hola")
 # Load an color image in grayscale
 # /Users/maggieliuzzi/predict_images/2.png
-img = cv2.imread('/Users/maggieliuzzi/predict_images/2.png', 0)
+img = cv2.imread('/Users/maggieliuzzi/predict_images/13.JPG', 1)
+height, width, channels = img.shape
+print(img.shape)
+plt.imshow(img, cmap = 'gray', interpolation = 'bicubic')
+imgray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+print(imgray.shape)
+plt.imshow(imgray, cmap = 'gray', interpolation = 'bicubic')
+ret, thresh = cv2.threshold(imgray, 127, 255, 0)
+imgray, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+imgcont = cv2.drawContours(imgray, contours, -1, (0,255,0), 3)
+print(imgcont.shape)
+# cnt = contours[4]
+# cv2.drawContours(imgray, [cnt], 0, (0,255,0), 3)
+
+# Set up the detector with default parameters.
+detector = cv2.SimpleBlobDetector_create()
+# Detect blobs.
+keypoints = detector.detect(imgray)
+'''
+# Draw detected blobs as red circles.
+# cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS ensures the size of the circle corresponds to the size of blob
+im_with_keypoints = cv2.drawKeypoints(imgray, keypoints, np.array([]), (0, 0, 255),
+                                      cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+'''
+# Show keypoints
+# cv2.imshow("Keypoints", im_with_keypoints)
+# cv2.waitKey(0)
+
+plt.imshow(imgcont, cmap = 'gray', interpolation = 'bicubic')
+plt.xticks([]), plt.yticks([])  # to hide tick values on X and Y axis
+plt.show()
+
+print("Hey")
+exit(0)
 
 plt.imshow(img, cmap = 'gray', interpolation = 'bicubic')
 plt.xticks([]), plt.yticks([])  # to hide tick values on X and Y axis
@@ -19,7 +52,7 @@ cv2.imshow('image',img)
 cv2.imsave('/Users/maggieliuzzi/predict_images/saved/2.png', img)
 # cv2.waitKey(0)
 # cv2.destroyAllWindows()
-print("Hey")
+
 
 parser = argparse.ArgumentParser(
     description="Classifies images in good, lens_flare or blurry",

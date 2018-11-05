@@ -2,6 +2,21 @@ import numpy as np
 import os
 import ssl
 import argparse
+# For solving issue: "IOError: image file is truncated (19 bytes not processed)"
+from PIL import ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+
+'''
+# Ensures that Keras is using TensorFlow as a back-end, then loads Keras # Optional
+keras_path = os.path.join(os.path.expanduser('~'), '.keras')
+keras_json_path = os.path.join(keras_path, 'keras.json')
+if not os.path.isdir(keras_path):
+    os.makedirs(keras_path)
+with open(keras_json_path, 'w') as kf:
+    contents = "{\"epsilon\": 1e-07,\"image_data_format\": \"channels_last\",\"backend\": \"tensorflow\",\"floatx\": \"float32\"}"
+    kf.write(contents)
+'''
+
 from keras.applications.mobilenetv2 import MobileNetV2
 from keras import models, layers
 from keras.preprocessing.image import ImageDataGenerator
@@ -9,8 +24,10 @@ from keras.preprocessing.image import ImageDataGenerator
 parser = argparse.ArgumentParser(
     description="Retrains top layers of MobileNetV2 for classifying images into good and faulty.",
     epilog="Created by Maggie Liuzzi")
+parser.add_argument('--fault', default=1,
+                    help="the fault to train for (i.e. flare or blurry; required.")
 parser.add_argument('--epochs', default=1,
-                    help="the number of epochs to train the network for.")
+                    help="the number of epochs to train the network for; required.")
 args = parser.parse_args()
 
 '''
@@ -47,10 +64,13 @@ The final Dense layer is replaced with a new one of size (2) for classifying goo
 
 np.random.seed(3)
 
-home_path = os.path.dirname(__file__)
-train_path = os.path.join(home_path, "dataset_adience_gender/train")
-validate_path = os.path.join(home_path, "dataset_adience_gender/validate")
-test_path = os.path.join(home_path, "dataset_adience_gender/test")
+home_path = os.path.dirname(os.path.abspath(__file__))
+if args.fault == "flare":
+    dataset_path = os.path.join(home_path, "training-data-formatted-flare/")
+elif args.fault == "blurry":
+    dataset_path = os.path.join(home_path, "training-data-formatted-blurry/")
+train_path = os.path.join(dataset_path, "train")
+validate_path = os.path.join(dataset_path, "validate")
 
 # Download MobileNetV2 without its classifier and freeze all but the last 4 layers
 ssl._create_default_https_context = ssl._create_unverified_context
@@ -83,4 +103,9 @@ print(validate_generator)
 
 model_new.fit_generator(train_generator, epochs=int(args.epochs), steps_per_epoch=len(train_generator), verbose=1,
                         validation_data=validate_generator, validation_steps=len(validate_generator))
-model_new.save('model_good_faulty.h5')
+
+models_path = os.path.join(home_path,'trained_models')
+if not os.path.isdir(models_path):
+    os.makedirs(models_path)
+model_new.save(models_path+'/model_good_'+args.fault+'.h5')
+print("Finished training and saved model.")

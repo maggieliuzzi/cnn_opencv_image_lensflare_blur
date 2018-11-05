@@ -8,8 +8,15 @@ venv/
 
 # Dataset
 training-data/
+training-data-formatted-flare/
 .jpg
 .png
 
 # Models
+trained_models/
 *.h5
+
+# Web Scraping
+downloads/
+.db
+.log
