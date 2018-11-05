@@ -1,6 +1,0 @@
-[MainThread] - 2018-11-05 09:28:44,400 - GoogleScraper.core - INFO - Going to scrape 1 keywords with 1 proxies by using 1 threads.
-[MainThread] - 2018-11-05 09:28:44,401 - GoogleScraper.scraping - INFO - [+] HttpScrape[localhost][search-type:normal][https://www.google.com/search?] using search engine "google". Num keywords=1, num pages for keyword=[1]
-[Thread-2] - 2018-11-05 09:28:45,403 - GoogleScraper.scraping - INFO - [HttpScrape-google][localhost]]Keyword: "lens flare" with [1] pages, slept 1 seconds before scraping. 1/1 already scraped.
-[MainThread] - 2018-11-05 09:32:24,703 - GoogleScraper.core - INFO - Going to scrape 1 keywords with 1 proxies by using 1 threads.
-[MainThread] - 2018-11-05 09:32:24,703 - GoogleScraper.scraping - INFO - [+] HttpScrape[localhost][search-type:normal][https://www.google.com/search?] using search engine "google". Num keywords=1, num pages for keyword=[1]
-[Thread-2] - 2018-11-05 09:32:29,708 - GoogleScraper.scraping - INFO - [HttpScrape-google][localhost]]Keyword: "lens flare" with [1] pages, slept 5 seconds before scraping. 1/1 already scraped.
