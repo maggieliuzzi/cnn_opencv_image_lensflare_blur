@@ -18,5 +18,5 @@ trained_models/
 
 # Web Scraping
 downloads/
-.db
-.log
+*.db
+*.log
