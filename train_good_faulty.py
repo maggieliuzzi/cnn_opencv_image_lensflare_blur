@@ -111,4 +111,4 @@ checkpointer = ModelCheckpoint(models_path+"/model.{epoch:02d}.hdf5", verbose=1)
 history = model_new.fit_generator(train_generator, epochs=int(args.epochs), steps_per_epoch=len(train_generator), verbose=1,
                         validation_data=validate_generator, validation_steps=len(validate_generator),
                         callbacks=[checkpointer])
-print("Finished training and saved model.")
+print("Finished training and saved models.")
