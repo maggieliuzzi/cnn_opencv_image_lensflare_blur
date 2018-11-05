@@ -7,7 +7,7 @@ import numpy as np
 parser = argparse.ArgumentParser(
     description="Blurs images in folder passed as argument and saves in new folder.",
     epilog="Created by Maggie Liuzzi")
-parser.add_argument('--folder_to_blur', default=1,
+parser.add_argument('--folder_to_blur', default=None, required=True,
                     help="the fault to train for (i.e. flare or blurry; required.")
 args = parser.parse_args()
 folder_to_blur = args.folder_to_blur

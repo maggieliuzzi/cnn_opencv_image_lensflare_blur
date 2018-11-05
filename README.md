@@ -21,7 +21,7 @@ Web-scrapping (https://github.com/hardikvasa/google-images-download, uses Chrome
 
 The project may be moved to a docker file at a later date, but for the time being, here is how it should be installed:
 
-1. Install **Python 2.7** if you haven't - (should also work with Python 3.6, but it needs further testing). Also make sure that you have installed **virtualenv**. If you haven't, you can install it globally using pip:
+1. Install **Python 2.7** and **virtualenv** if you haven't - (should also work with Python 3.6, but needs further testing):
 
 ```shell
 pip install virtualenv
@@ -37,20 +37,34 @@ git clone https://gitlab.com/maggieliuzzi/cnn_lensflare_blur.git
 
 ```
 cd cnn_lensflare_blur
-virtualenv -p [path to your python 2.7 interpreter] venv
+virtualenv -p {path to your python 2.7 interpreter} venv
 ```
 
-4. Activate the new virtual environment (omit "source" if on Windows):
+
+4. Add cv2 to your virtual environment:
 
 ```shell
-source venv/bin/activate
+For macOS (based on https://www.youtube.com/watch?v=iluST-V757A):
+brew update (or install)
+brew tap brewsci/bio
+brew install opencv3 --with-contrib
+cd usr/local/Cellar/opencv (use your path)
+cd {version you want to use}
+cd lib/python2.7/site-packages (or the version of python you want to use)
+pwd (and copy the location)
+{path/to/cv2.{}.so} (should find it, even if permission is denied)
+cd venv (find and cd into the virtual environment you created)
+source venv/bin/activate (to activate your virtual environment; omit "source" if on Windows)
+cd lib/python2.7/site-packages
+ln -s {path/to/cv2.{}.so} {cv2.so} (saving as cv2.so is optional)
+cd ../../../ (to root of virtual environment)
+pip install numpy
+python
+>>> import cv2 (should give no errors)
 ```
 
-5. Add cv2 to your virtual environment (https://www.youtube.com/watch?v=iluST-V757A):
 
-
-
-6. Install the project's dependencies:
+5. Install the project's dependencies:
 
 ```shell
 pip install -r requirements.txt
@@ -58,9 +72,9 @@ pip install -r requirements.txt
 
 With that, you should be good to go!
 
-Alternatively, you can follow installation up to the end of Step 2 and then use PyCharm to create the virtual environment for you. If you do that, make sure pip is installed at /cnn_lensflare_blur/venv/bin and that the terminal in PyCharm says "(venv)" before the current location. If it does, you should be good to continue from the start of Step 5.
 
 
+Predicting:
 
 * **detector.py** takes a model and an image as arguments and classifies the image as 'Good' or 'Faulty'.
 * **server.py** scripts start a server that receives HTTP POST request with a test image and outputs the estimated probabilities. 
@@ -70,6 +84,20 @@ Eg: http://0.0.0.0:4000/predict
     "Faulty": 0.9543766379356384
 }
 * **predict_functions.py** defines functions used to make predictions.
-* **test.py** scripts test the quality of a model with the images in the test/ folder generated running preprocessing.py.
-* **train_good_faulty.py** scripts train the network over a certain number of epochs and outputs an .h5 model.
-* **preprocessing.py** scripts separate data into training, validation and testing sets.
+
+
+Preprocessing and training:
+
+* **train_good_faulty.py** trains the network over a certain number of epochs and outputs an .hdf5 model every epoch.
+* **preprocessing_good_faulty.py** takes target fault to train for and separate data into training, validation and testing sets.
+* **motion_blurrying.py** motion blurs images in a folder and saves them to a new folder.
+
+
+Testing:
+
+* **test.py** tests the quality of a model with the images in the test/ folder generated running preprocessing_good_faulty.py.
+
+
+Extras:
+
+* **utils.py** defines extra error, warning and timer functions.

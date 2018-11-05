@@ -1,19 +1,29 @@
 from utils import warning, error, timer
-
 import math
 import os
+import argparse
 import shutil
 import csv
 import glob # Try
 from random import shuffle
 
-# I first manually duplicated the images ro reach 200 in total in each category
+
+parser = argparse.ArgumentParser(
+    description="Retrains top layers of MobileNetV2 for classifying images into good and faulty.",
+    epilog="Created by Maggie Liuzzi")
+parser.add_argument('--fault', default=None, required=True,
+                    help="the fault to train for (i.e. flare or blurry; required.")
+args = parser.parse_args()
+fault = args.fault
+
+
+# I first manually duplicated the images to reach 200 in total in each category + added images sourced by web scrapping
 
 home_path = os.path.dirname(os.path.abspath(__file__)) # abspath?
 source_path = os.path.join(home_path, "training-data/")
 good_data_list = glob.glob(os.path.join(source_path,'good-data/*.JPG')) # Try
 flare_data_list = glob.glob(os.path.join(source_path,'flare-data/*.JPG'))
-data_list = good_data_list + flare_data_list
+blurry_data_list = glob.glob(os.path.join(source_path,'blurry-data/*.JPG'))
 csv_path = os.path.join(source_path,'data.csv')
 
 with open(csv_path, 'w') as wf:
@@ -22,15 +32,29 @@ with open(csv_path, 'w') as wf:
         writer.writerow([item] + ["good"])
     for item in flare_data_list:
         writer.writerow([item] + ["flare"])
+    for item in blurry_data_list:
+        writer.writerow([item] + ["blurry"])
 
-dataset_path = os.path.join(home_path, "training-data-formatted-flare/")
+
+if fault == 'flare':
+    dataset_path = os.path.join(home_path, "training-data-formatted-flare/")
+elif fault == 'blurry':
+    dataset_path = os.path.join(home_path, "training-data-formatted-blurry/")
+
 train_path = os.path.join(dataset_path, "train")
 validate_path = os.path.join(dataset_path, "validate")
 train_path_0 = os.path.join(train_path, "good")
-train_path_1 = os.path.join(train_path, "flare")
+if fault == 'flare':
+    train_path_1 = os.path.join(train_path, "flare")
+elif fault == 'blurry':
+    train_path_1 = os.path.join(train_path, "blurry")
 validate_path_0 = os.path.join(validate_path, "good")
-validate_path_1 = os.path.join(validate_path, "flare")
+if fault == 'flare':
+    validate_path_1 = os.path.join(validate_path, "flare")
+elif fault == 'blurry':
+    validate_path_1 = os.path.join(validate_path, "blurry")
 test_path = os.path.join(dataset_path, "test")
+
 processed_paths = [train_path_0, train_path_1, validate_path_0, validate_path_1, test_path]
 
 for path in processed_paths:
@@ -46,7 +70,7 @@ with open(csv_path) as csvfile:
 
     total_images = 0
     usable = []
-    # Assuming all training images are usable
+    # Assuming all training images are usable - Add filtering
     for row in reader:
         usable.append(row)
         total_images += 1
@@ -111,4 +135,4 @@ with open(csv_path) as csvfile:
     print("Validation images: " + str(len(validate_images_data)))
     print("Testing images: " + str(len(test_images_data)))
 
-print("Pre-processing done.")
+print("Pre-processing for 'good' and '"+fault+"' done.")

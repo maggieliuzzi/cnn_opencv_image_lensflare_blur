@@ -19,12 +19,13 @@ with open(keras_json_path, 'w') as kf:
 
 from keras.applications.mobilenetv2 import MobileNetV2
 from keras import models, layers
+from keras.callbacks import ModelCheckpoint
 from keras.preprocessing.image import ImageDataGenerator
 
 parser = argparse.ArgumentParser(
     description="Retrains top layers of MobileNetV2 for classifying images into good and faulty.",
     epilog="Created by Maggie Liuzzi")
-parser.add_argument('--fault', default=1,
+parser.add_argument('--fault', default=None, required=True,
                     help="the fault to train for (i.e. flare or blurry; required.")
 parser.add_argument('--epochs', default=1,
                     help="the number of epochs to train the network for; required.")
@@ -101,11 +102,13 @@ model_new.compile(optimizer='rmsprop',
 print(train_generator)
 print(validate_generator)
 
-model_new.fit_generator(train_generator, epochs=int(args.epochs), steps_per_epoch=len(train_generator), verbose=1,
-                        validation_data=validate_generator, validation_steps=len(validate_generator))
-
-models_path = os.path.join(home_path,'trained_models')
+models_path = os.path.join(home_path,'trained_models','good_'+args.fault+'_models')
 if not os.path.isdir(models_path):
     os.makedirs(models_path)
-model_new.save(models_path+'/model_good_'+args.fault+'.h5')
+
+model_new.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
+checkpointer = ModelCheckpoint(models_path+"/model.{epoch:02d}.hdf5", verbose=1)
+history = model_new.fit_generator(train_generator, epochs=int(args.epochs), steps_per_epoch=len(train_generator), verbose=1,
+                        validation_data=validate_generator, validation_steps=len(validate_generator),
+                        callbacks=[checkpointer])
 print("Finished training and saved model.")

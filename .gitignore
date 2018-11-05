@@ -15,6 +15,7 @@ training-data-formatted-flare/
 # Models
 trained_models/
 *.h5
+*.hdf5
 
 # Web Scraping
 downloads/
