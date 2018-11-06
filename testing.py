@@ -37,12 +37,8 @@ with open(home_path+"/training-data-formatted-"+fault+"/test.csv",'r') as f, ope
         original_image = newline[0]
         to_replace_1 = home_path+'/training-data/'+fault+'-data/'
         to_replace_2 = home_path+'/training-data/good-data/'
-        print("to replace: "+to_replace_1)
         original_image = original_image.replace(to_replace_1, '')
         original_image = original_image.replace(to_replace_2, '')
-        print(" ")
-        print("path_to_test: "+path_to_test)
-        print("original_image: "+original_image)
         image = path_to_test + original_image
         print("image: "+image)
 
