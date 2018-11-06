@@ -41,7 +41,7 @@ virtualenv -p {path to your python 2.7 interpreter} venv
 ```
 
 
-4. Add cv2 to your virtual environment:
+4. Install and add cv2 to your virtual environment:
 
 ```shell
 For macOS (based on https://www.youtube.com/watch?v=iluST-V757A):
