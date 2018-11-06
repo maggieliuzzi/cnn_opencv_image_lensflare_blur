@@ -77,7 +77,7 @@ With that, you should be good to go!
 
 Predicting:
 
-* **detector.py** takes a model and an image as arguments and classifies the image as 'Good' or 'Faulty'.
+* **detector.py** takes an image, a model and the target fault as arguments and classifies the image as 'Faulty' or 'Good'.
 * **server.py** scripts start a server that receives HTTP POST request with a test image and outputs the estimated probabilities. 
 Eg: http://0.0.0.0:4000/predict
 "prediction": {
