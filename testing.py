@@ -15,10 +15,10 @@ args = parser.parse_args()
 model = prepare_model(args.model)
 fault = args.fault
 
-home_path = os.path.dirname(__file__)
+home_path = os.path.dirname(os.path.abspath(__file__))
 
 
-with open(home_path+"training-data-formatted-"+fault+"/test.csv",'r') as f, open(home_path+"training-data-formatted-"+fault+"/test_pred.csv",'w') as newf:
+with open(home_path+"/training-data-formatted-"+fault+"/test.csv",'r') as f, open(home_path+"/training-data-formatted-"+fault+"/test_pred.csv",'w') as newf:
     reader = csv.reader(f)
     writer = csv.writer(newf)
 
@@ -33,9 +33,14 @@ with open(home_path+"training-data-formatted-"+fault+"/test.csv",'r') as f, open
         newline = line
         actual_quality = newline[1]
 
-        path_to_test = home_path+"training-data-formatted-"+fault+"/test"
+        path_to_test = home_path+"/training-data-formatted-"+fault+"/test/"
         original_image = newline[0]
+        original_image = original_image.replace(home_path+'/training-data/'+fault+'-data/', '')
+        print(home_path)
+        print(path_to_test)
+        print(original_image)
         image = path_to_test + original_image
+        print(image)
 
         probability_vector = predict_from_file(model, image)
 
