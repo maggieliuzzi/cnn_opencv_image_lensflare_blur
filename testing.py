@@ -35,12 +35,16 @@ with open(home_path+"/training-data-formatted-"+fault+"/test.csv",'r') as f, ope
 
         path_to_test = home_path+"/training-data-formatted-"+fault+"/test/"
         original_image = newline[0]
-        original_image = original_image.replace(home_path+'/training-data/'+fault+'-data/', '')
-        print(home_path)
-        print(path_to_test)
-        print(original_image)
+        to_replace_1 = home_path+'/training-data/'+fault+'-data/'
+        to_replace_2 = home_path+'/training-data/good-data/'
+        print("to replace: "+to_replace_1)
+        original_image = original_image.replace(to_replace_1, '')
+        original_image = original_image.replace(to_replace_2, '')
+        print(" ")
+        print("path_to_test: "+path_to_test)
+        print("original_image: "+original_image)
         image = path_to_test + original_image
-        print(image)
+        print("image: "+image)
 
         probability_vector = predict_from_file(model, image)
 
